@@ -41,7 +41,7 @@ class _SmsHomePageState extends State<SmsHomePage> {
     );
 
     setState(() {
-      _messages = messages.take(100).toList(); // Keep only the last 5 messages
+      _messages = messages.take(5).toList(); // Keep only the last 5 messages
     });
 
     // Print to terminal
