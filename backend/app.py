@@ -33,32 +33,35 @@ def json_serializer(data):
 @app.route('/parse-sms', methods=['POST'])
 def parse_sms():
     """Endpoint to parse a list of SMS messages."""
-    data = request.json  # Expecting a JSON body with 'sms_list' key
-
-    if not data or 'sms_list' not in data:
-        return jsonify({'error': 'Invalid input, expected JSON with "sms_list"'}), 400
-
-    sms_list = data['sms_list']
-    if not isinstance(sms_list, list):
-        return jsonify({'error': '"sms_list" must be a list'}), 400
-
     try:
+        data = request.json  # Expecting a JSON body with 'sms_list' key
+        print("Received request data:", data)  # Log incoming data for debugging
+
+        if not data or 'sms_list' not in data:
+            return jsonify({'error': 'Invalid input, expected JSON with "sms_list"'}), 400
+
+        sms_list = data['sms_list']
+        if not isinstance(sms_list, list):
+            return jsonify({'error': '"sms_list" must be a list'}), 400
+
         parsed_data = parse_sms_list(sms_list)
 
         # Insert parsed data into MongoDB and get inserted document IDs
         insert_result = mongo.db.transactions.insert_many(parsed_data)
-        print("inserted to db")
-        
+        print("Inserted to DB:", parsed_data)  # Log parsed data to check format
+
         # Update parsed_data with MongoDB IDs
         for record, insert_id in zip(parsed_data, insert_result.inserted_ids):
             record["_id"] = insert_id
-        
+
         # Serialize ObjectId fields to strings
         json_serialized_data = json_serializer(parsed_data)
-        
+
         return jsonify(json_serialized_data), 200
     except Exception as e:
+        print("Error in /parse-sms:", e)  # Log detailed error
         return jsonify({'error': str(e)}), 500
+
 
 @app.route('/print', methods=['GET'])
 def print_hello():
