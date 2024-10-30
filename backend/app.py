@@ -3,7 +3,6 @@ from sms_parser import parse_sms_list
 from flask_pymongo import PyMongo
 from bson import ObjectId
 
-
 app = Flask(__name__)
 
 # Configure the MongoDB URI
@@ -13,15 +12,13 @@ mongo = PyMongo(app)
 # Database connection check
 def initialize_db():
     try:
-        # Attempt to read a document from a sample collection to check connection
         mongo.db.transactions.find_one()
-        print("connected to db")
+        print("Connected to the database")
     except Exception as e:
         print(f"Error connecting to the database: {e}")
 
-# Add this helper function to convert ObjectIds to strings
+# Helper function to convert ObjectIds to strings
 def json_serializer(data):
-    """Converts ObjectId instances to strings for JSON serialization."""
     if isinstance(data, list):
         for item in data:
             if "_id" in item:
@@ -32,43 +29,62 @@ def json_serializer(data):
 
 @app.route('/parse-sms', methods=['POST'])
 def parse_sms():
-    """Endpoint to parse a list of SMS messages."""
+    """Endpoint to parse and save SMS messages for a specific user."""
     try:
-        data = request.json  # Expecting a JSON body with 'sms_list' key
-        print("Received request data:", data)  # Log incoming data for debugging
+        data = request.json  # Expecting JSON with 'user_id' and 'sms_list'
+        print("Received request data:", data)  # Log data for debugging
 
-        if not data or 'sms_list' not in data:
-            return jsonify({'error': 'Invalid input, expected JSON with "sms_list"'}), 400
+        if not data or 'user_id' not in data or 'sms_list' not in data:
+            return jsonify({'error': 'Invalid input, expected user_id and sms_list'}), 400
 
+        user_id = data['user_id']
         sms_list = data['sms_list']
+
         if not isinstance(sms_list, list):
             return jsonify({'error': '"sms_list" must be a list'}), 400
 
+        # Parse the SMS data
         parsed_data = parse_sms_list(sms_list)
 
-        # Insert parsed data into MongoDB and get inserted document IDs
+        # Add user_id to each SMS entry
+        for sms in parsed_data:
+            sms['user_id'] = user_id
+
+        # Insert parsed data into MongoDB
         insert_result = mongo.db.transactions.insert_many(parsed_data)
-        print("Inserted to DB:", parsed_data)  # Log parsed data to check format
+        print("Inserted to DB:", parsed_data)
 
         # Update parsed_data with MongoDB IDs
         for record, insert_id in zip(parsed_data, insert_result.inserted_ids):
             record["_id"] = insert_id
 
-        # Serialize ObjectId fields to strings
+        # Serialize ObjectIds for JSON response
         json_serialized_data = json_serializer(parsed_data)
 
         return jsonify(json_serialized_data), 200
     except Exception as e:
-        print("Error in /parse-sms:", e)  # Log detailed error
+        print("Error in /parse-sms:", e)
         return jsonify({'error': str(e)}), 500
 
+@app.route('/user/<user_id>/transactions', methods=['GET'])
+def get_user_transactions(user_id):
+    """Fetch all transactions for a specific user."""
+    try:
+        transactions = list(mongo.db.transactions.find({"user_id": user_id}))
+        if not transactions:
+            return jsonify({'message': 'No transactions found for this user'}), 404
+
+        json_serialized_data = json_serializer(transactions)
+        return jsonify(json_serialized_data), 200
+    except Exception as e:
+        print("Error in /user/<user_id>/transactions:", e)
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/print', methods=['GET'])
 def print_hello():
-    print("hello")  # This will print "hello" in the terminal
+    print("hello")
     return jsonify({"message": "Hello from Flask!"})
 
 if __name__ == '__main__':
-    # Run database initialization function before starting the server
     initialize_db()
     app.run(debug=True, host='0.0.0.0', port=5000)
