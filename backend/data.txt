@@ -1,2 +1,8 @@
 Received request data: {'sms_list': [{'address': 'AD-AIRTEL', 'body': 'Do not miss out on superior indoor coverage with Airtel WiFi Calling! For better experience, change your smartphone settings today. Click u.airtel.in/hKOOl5'}, {'address': '56321', 'body': 'अब बेफिक्र होकर डाटा का इस्तेमाल करें क्योंकि आप बिना किसी अतिरिक्त शुल्क के 1GB डाटा का लोन ले सकते हैं। डाटा वैधता- 1 दिन। लाभ उठाने के लिए डायल करें *567*3# या i.airtel.in/get_data_loan पर क्लिक करें। अपने अगले डाटा टॉप-अप के साथ 1GB कम पाएं।'}, {'address': 'VD-BOBTXN', 'body': 'Rs.2.25 Credited to A/c ...1777 from:ACHCR/Cochin Shi. Total Bal:Rs.70326.7CR. Avlbl Amt:Rs.70326.7(28-10-2024 08:06:36) - Bank of Baroda'}, {'address': 'JX-MYTNEU', 'body': "Hi, you've used 0.96 NeuCoin(s) at bigbasket on 28-10-2024. Check your NeuCoins balance at https://vil.ltd/MYTNEU/c/TNRBTC - Team TataNeu"}, {'address': 'VM-INPOST', 'body': 'Article No:EF776647111IN received @ Chennai NSH on 27/10/2024 21:47:28.Track @ www.indiapost.gov.in'}]}
+
+
 Inserted to DB: [{'Receiver': 'rs credited', 'Account Number': None, 'Amount': 'Rs.2.25', 'Date': '28-10-2024', 'Time': '08:06', 'Transaction Type': 'credit', 'Category': 'other', '_id': ObjectId('671f365c62027678bb43c0fc')}, {'Receiver': None, 'Account Number': None, 'Amount': None, 'Date': '28-10-2024', 'Time': None, 'Transaction Type': None, 'Category': 'other', '_id': ObjectId('671f365c62027678bb43c0fd')}]
+
+
++ account balance
++ userid
