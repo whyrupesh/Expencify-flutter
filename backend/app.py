@@ -73,7 +73,7 @@ def get_user_transactions(user_id):
         transactions = list(mongo.db.transactions.find({"user_id": user_id}))
         if not transactions:
             return jsonify({'message': 'No transactions found for this user'}), 404
-        print("Transactions fetched:", transactions) 
+        # print("Transactions fetched:", transactions) 
         json_serialized_data = json_serializer(transactions)
         return jsonify(json_serialized_data), 200
     except Exception as e:

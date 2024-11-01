@@ -24,7 +24,8 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   final String apiUrl =
-      'http://192.168.211.75:5000/user/${FirebaseAuth.instance.currentUser?.uid}/transactions';
+      'http://13.233.104.228:5001/user/${FirebaseAuth.instance.currentUser?.uid}/transactions';
+  // 'http://192.168.211.75:5000/user/${FirebaseAuth.instance.currentUser?.uid}/transactions';
 
   Future<void> fetchUserTransactions() async {
     try {

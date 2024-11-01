@@ -77,7 +77,9 @@ class SmsService {
           .toList();
 
       final response = await http.post(
-        Uri.parse("http://192.168.211.75:5000/parse-sms"),
+        Uri.parse("http://13.233.104.228:5001/parse-sms"),
+        // Uri.parse("http://192.168.211.75:5000/parse-sms"),
+
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "user_id": user.uid,
