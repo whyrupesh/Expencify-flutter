@@ -87,9 +87,9 @@ class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Transaction Page'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Transaction Page'),
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: isLoading

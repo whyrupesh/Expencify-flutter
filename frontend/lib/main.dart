@@ -21,6 +21,7 @@ class ExpencifyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Expencify',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
       initialRoute: '/login',
       routes: {
